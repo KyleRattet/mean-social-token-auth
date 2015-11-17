@@ -1,5 +1,6 @@
 app.controller('loginCtrl', function($scope, $auth, $rootScope, $window, $location) {
 
+//$auth is the injection for satellizer
   $scope.login = function() {
 
     var user = {

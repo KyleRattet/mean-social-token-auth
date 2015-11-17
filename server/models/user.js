@@ -14,6 +14,12 @@ var User = new Schema({
   password: {
     type: String,
     select: false
+  },
+  githubProfileID: {
+    type: String
+  },
+  googleProfileID: {
+    type: String
   }
 });
 
