@@ -5,7 +5,7 @@ var jwt = require('jwt-simple');
 var request = require('request');
 var qs = require('querystring');
 
-var config = require('../../_config');
+var config = require('../../config');
 var User = require('../models/user.js');
 
 
@@ -61,6 +61,7 @@ router.post('/signup', function(req, res) {
       });
     }
     var user = new User({
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password
     });
@@ -135,6 +136,7 @@ router.post('/github', function(req, res) {
               return res.status(400).send({ message: 'User not found' });
             }
             user.email = profile.email;
+            user.name = profile.name;
             user.githubProfileID = profile.id;
             user.save(function() {
               var token = createToken(user);
@@ -157,6 +159,7 @@ router.post('/github', function(req, res) {
           }
           var user = new User();
           user.email = profile.email;
+          user.name = profile.name;
           user.githubProfileID = profile.id;
           user.save(function() {
             var token = createToken(user);
@@ -195,6 +198,7 @@ router.post('/google', function(req, res) {
 
    // Step 2. Retrieve profile information about the current user.
    request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
+    console.log(profile, "profile");
      if (profile.error) {
        return res.status(500).send({message: profile.error.message});
      }
@@ -210,6 +214,7 @@ router.post('/google', function(req, res) {
            if (!user) {
              return res.status(400).send({ message: 'User not found' });
            }
+           user.name = profile.name;
            user.googleProfileID = profile.sub;
            user.email = profile.email;
            user.save(function() {
@@ -230,6 +235,7 @@ router.post('/google', function(req, res) {
            });
          }
          var user = new User();
+         user.name = profile.name;
          user.googleProfileID = profile.sub;
          user.email = profile.email;
          user.save(function(err) {
